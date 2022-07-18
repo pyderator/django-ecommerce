@@ -1,10 +1,36 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import JsonResponse
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
+from .forms import RegisterForm
+from django.contrib.auth.forms import AuthenticationForm
+from .models import Customer
 import json
 import datetime
 from .models import * 
 from .utils import cookieCart, cartData, guestOrder
 
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            email = form.cleaned_data.get('email')
+            user = authenticate(username = username, password = password)
+            print(user)
+            customer = Customer(user = user, name=username, email=email)
+            print(customer)
+            customer.save()
+            login(request, user)
+            return redirect('store')
+    else:
+        form = RegisterForm()
+        print(form)
+    return render(request, 'registration/register.html', {'form': form})
+
+@login_required
 def store(request):
 	data = cartData(request)
 
@@ -16,7 +42,13 @@ def store(request):
 	context = {'products':products, 'cartItems':cartItems}
 	return render(request, 'store/store.html', context)
 
+@login_required
+def productdetail(request,pk):
+    product = Product.objects.get(id = pk)
+    return render(request, 'store/product.html', {'product': product})
 
+
+@login_required
 def cart(request):
 	data = cartData(request)
 
@@ -27,6 +59,7 @@ def cart(request):
 	context = {'items':items, 'order':order, 'cartItems':cartItems}
 	return render(request, 'store/cart.html', context)
 
+@login_required
 def checkout(request):
 	data = cartData(request)
 	
@@ -37,6 +70,7 @@ def checkout(request):
 	context = {'items':items, 'order':order, 'cartItems':cartItems}
 	return render(request, 'store/checkout.html', context)
 
+@login_required
 def updateItem(request):
 	data = json.loads(request.body)
 	productId = data['productId']
@@ -62,6 +96,7 @@ def updateItem(request):
 
 	return JsonResponse('Item was added', safe=False)
 
+@login_required
 def processOrder(request):
 	transaction_id = datetime.datetime.now().timestamp()
 	data = json.loads(request.body)
