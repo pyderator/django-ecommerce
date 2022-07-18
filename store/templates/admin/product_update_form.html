@@ -1,0 +1,39 @@
+{% extends "base/index.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+<div class="container">
+  <h2 class="mb-4">Add a product</h2>
+{% if form.is_multipart %}
+    <form enctype="multipart/form-data" method="post" >
+{% else %}
+    <form method="post" >
+{% endif %}
+{% csrf_token %}
+{% for field in form %}
+  {% if "image" in field.html_name %}
+  <div class="form-group">
+    <label for="exampleFormControlInput1">{{ field.label_tag }}</label>
+    {{field}}
+    {{ field.errors }}
+    {% if field.help_text %}
+    <p class="help">{{ field.help_text|safe }}</p>
+    {% endif %}
+    </div>
+  {% else %}
+  <div class="form-group">
+    <label for="exampleFormControlInput1">{{ field.label_tag }}</label>
+    <input type="{{ field.field.type }}" name="{{ field.html_name }}" value="{{ field.value }}" class="form-control" id="exampleFormControlInput1">
+        {% for error in field.errors %}
+          <p class="text-warning my-1">{{error}}</p>
+        {% endfor %}
+        {% if field.help_text %}
+        <p class="text-green-400">{{ field.help_text|safe }}</p>
+        {% endif %}
+  </div>
+  {% endif %}
+{% endfor %}
+
+<button type="submit" class="btn btn-success">Update Product</button>
+</form>
+</div>
+{% endblock %}

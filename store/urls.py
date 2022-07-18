@@ -14,5 +14,9 @@ urlpatterns = [
 	path('register/', views.register, name='register'),
 
 	path('add_product/', views.add_product, name='add_product'),
-	path('unauthorized/', views.unauthorized, name="unauthorized")
+	path('unauthorized/', views.unauthorized, name="unauthorized"),
+
+	path('view_products/', views.ProductListView.as_view(template_name="admin/product_list.html"), name="product_list"),
+	path('products/<pk>/update', views.ProductUpdateView.as_view(template_name="admin/product_update_form.html"), name="product_update_form"),
+	path('products/<pk>/delete', views.ProductDeleteView.as_view(template_name="admin/product_delete_form.html"), name="product_delete_form")
 ]

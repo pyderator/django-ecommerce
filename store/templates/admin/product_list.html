@@ -1,0 +1,30 @@
+{% extends "base/index.html" %}
+{% block content %}
+<div class="container">
+<h2 class="mb-">Products</h2>
+
+{% for product in object_list %}
+
+<div class="col">
+  <div class=" card my-4 p-4">
+    <img class="thumbnail" src="{{product.imageURL}}" style="max-width: 100%;">
+    <div class="">
+      <h6><strong>{{product.name}}</strong></h6>
+      <hr>
+
+      <a href="{% url 'product_update_form' product.id %}" class="btn btn-outline-secondary add-btn update-cart">Edit</a>
+      <a href="{% url 'product_delete_form' product.id %}" class="btn btn-outline-danger add-btn update-cart">Delete</a>
+      
+      <a class="btn btn-outline-success" href="{% url 'productdetail' product.id %}">View</a>
+      <h4 style="display: inline-block; float: right"><strong>${{product.price}}</strong></h4>
+
+    </div>
+  </div>
+</div>
+{% empty %}
+  <h2>No Products Listed</h2>
+{% endfor %}
+
+</div>
+
+{% endblock %}

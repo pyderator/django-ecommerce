@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.views.generic.edit import DeleteView, UpdateView
+from django.views.generic.list import ListView
 
 from .forms import AddProductForm, RegisterForm
 from .models import *
@@ -145,3 +147,19 @@ def add_product(request):
 			'form':form
 		})
 	return redirect('unauthorized')
+
+
+class ProductListView(ListView):
+	model = Product
+	paginate_by = 100
+
+class ProductUpdateView(UpdateView):
+	model = Product
+	fields = ["name", "price", "description",  "image"]
+	template_name_suffix: str = "_update_form"
+	success_url = '/view_products/'
+
+
+class ProductDeleteView(DeleteView):
+	model = Product
+	success_url = "/view_products/"
