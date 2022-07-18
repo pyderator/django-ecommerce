@@ -167,3 +167,9 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
 	login_url = "/login/"
 	model = Product
 	success_url = "/view_products/"
+
+
+class CustomerListView(LoginRequiredMixin, ListView):
+	login_url = "/login/"
+	model = Customer
+	paginate_by = 10

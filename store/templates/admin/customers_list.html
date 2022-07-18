@@ -1,0 +1,39 @@
+{% extends "base/index.html" %}
+{% block content %}
+<div class="container">
+<h2 class="mb-">Users</h2>
+
+{% for customer in object_list %}
+<div class="col">
+  <div class=" card my-4 p-4">
+    <div class="">
+      <h4>Email: {{customer.email}}</h4> 
+      <h4>User Id: {{customer.id}}</h4> 
+      <h4>{{customer.name}}</h4>
+    </div>
+  </div>
+</div>
+{% empty %}
+  <h2>No Products Listed</h2>
+{% endfor %}
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+    {% endif %}
+  <li class="page-item">
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+  </li>
+  {% if page_obj.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
+  {% endif %}
+
+  </ul>
+</nav>
+
+</div>
+
+{% endblock %}

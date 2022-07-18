@@ -19,5 +19,6 @@ urlpatterns = [
   # ADMIN ROUTES
 	path('view_products/', views.ProductListView.as_view(template_name="admin/product_list.html"), name="product_list"),
 	path('products/<pk>/update', views.ProductUpdateView.as_view(template_name="admin/product_update_form.html"), name="product_update_form"),
-	path('products/<pk>/delete', views.ProductDeleteView.as_view(template_name="admin/product_delete_form.html"), name="product_delete_form")
+	path('products/<pk>/delete', views.ProductDeleteView.as_view(template_name="admin/product_delete_form.html"), name="product_delete_form"),
+	path('view_customers/', views.CustomerListView.as_view(template_name="admin/customers_list.html"), name="customers_list"),
 ]
