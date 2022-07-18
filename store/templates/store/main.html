@@ -76,8 +76,12 @@
 	      </li>
 	 
 	    </ul>
-	    <div class="form-inline my-2 my-lg-0">
+	    <div class="form-inline my-2 my-lg-0 flex justify-center align-middle">
       {% if user.is_authenticated %}
+				{% if user.is_superuser %}
+				<p>Admin</p>
+	     	<a href="{% url 'add_product' %}"class="btn btn-success">Add Product</a>
+				{% endif %}
 			  <p>Welcome, {{ user.username }}</p>
 	     	<a href="{% url 'logout' %}"class="btn btn-warning">Logout</a>
       {% else %}

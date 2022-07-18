@@ -1,14 +1,17 @@
-from django.shortcuts import render,redirect
-from django.http import JsonResponse
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.decorators import login_required
-from .forms import RegisterForm
-from django.contrib.auth.forms import AuthenticationForm
-from .models import Customer
-import json
 import datetime
-from .models import * 
-from .utils import cookieCart, cartData, guestOrder
+import json
+
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+
+from .forms import AddProductForm, RegisterForm
+from .models import *
+from .models import Customer
+from .utils import cartData, guestOrder
+
 
 def register(request):
     if request.method == 'POST':
@@ -30,7 +33,9 @@ def register(request):
         print(form)
     return render(request, 'registration/register.html', {'form': form})
 
-@login_required
+def unauthorized(request):
+	return render(request, "store/unauthorized.html")
+
 def store(request):
 	data = cartData(request)
 
@@ -125,3 +130,18 @@ def processOrder(request):
 		)
 
 	return JsonResponse('Payment submitted..', safe=False)
+
+def add_product(request):
+	if request.user.is_superuser:
+		if request.method == "POST":
+			form = AddProductForm(request.POST, request.FILES)
+			if form.is_valid():
+				form.save()
+				return redirect('/')
+		else:
+			form = AddProductForm()
+
+		return render(request, "admin/add_product.html",{
+			'form':form
+		})
+	return redirect('unauthorized')

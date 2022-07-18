@@ -1,5 +1,11 @@
 body{
 	background-color: hsl(0, 0%, 98%);
+	
+}
+
+p {
+	margin: 0 !important;
+	padding: 0 !important;
 }
 
 h1,h2,h3,h4,h5,h6{
