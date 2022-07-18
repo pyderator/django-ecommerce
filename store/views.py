@@ -4,8 +4,10 @@ import json
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
 from django.views.generic.edit import DeleteView, UpdateView
 from django.views.generic.list import ListView
 
@@ -149,17 +151,19 @@ def add_product(request):
 	return redirect('unauthorized')
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
+	login_url = "/login/"
 	model = Product
-	paginate_by = 100
+	paginate_by = 4
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
+	login_url = "/login/"
 	model = Product
 	fields = ["name", "price", "description",  "image"]
 	template_name_suffix: str = "_update_form"
 	success_url = '/view_products/'
 
-
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
+	login_url = "/login/"
 	model = Product
 	success_url = "/view_products/"

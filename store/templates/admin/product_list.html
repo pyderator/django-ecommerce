@@ -4,7 +4,6 @@
 <h2 class="mb-">Products</h2>
 
 {% for product in object_list %}
-
 <div class="col">
   <div class=" card my-4 p-4">
     <img class="thumbnail" src="{{product.imageURL}}" style="max-width: 100%;">
@@ -24,6 +23,23 @@
 {% empty %}
   <h2>No Products Listed</h2>
 {% endfor %}
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+    {% endif %}
+  <li class="page-item">
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+  </li>
+  {% if page_obj.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
+  {% endif %}
+
+  </ul>
+</nav>
 
 </div>
 
